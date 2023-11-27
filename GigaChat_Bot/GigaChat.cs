@@ -1,4 +1,4 @@
-﻿using YandexGPT_bot.services;
+﻿using GigaChat_Bot.services;
 
 namespace GigaChat_bot;
 

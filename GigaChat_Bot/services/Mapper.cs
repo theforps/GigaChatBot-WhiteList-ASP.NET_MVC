@@ -1,6 +1,6 @@
-using YandexGPT_bot.models;
+using GigaChat_Bot.models;
 
-namespace YandexGPT_bot.services;
+namespace GigaChat_Bot.services;
 
 public class Mapper
 {

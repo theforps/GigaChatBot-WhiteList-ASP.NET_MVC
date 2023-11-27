@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace YandexGPT_bot.resourses;
+namespace GigaChat_Bot.resourses;
 
 public static class Consts
 {

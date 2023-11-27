@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace YandexGPT_bot.models;
+namespace GigaChat_Bot.models;
 
 public class User
 {
@@ -9,4 +9,5 @@ public class User
     public int Id { get; set; }
     public string? Username { get; set; }
     public bool Ban { get; set; } = false;
+    public long ChatId { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿namespace YandexGPT_bot.models;
+﻿namespace GigaChat_Bot.models;
 
 public class Request
 {

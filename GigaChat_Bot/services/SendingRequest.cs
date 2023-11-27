@@ -2,13 +2,13 @@
 using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
-using YandexGPT_bot.models;
-using YandexGPT_bot.repositories.impl;
-using YandexGPT_bot.repositories.interfaces;
-using YandexGPT_bot.resourses;
+using GigaChat_Bot.models;
+using GigaChat_Bot.repositories.impl;
+using GigaChat_Bot.repositories.interfaces;
+using GigaChat_Bot.resourses;
 
 
-namespace YandexGPT_bot.services;
+namespace GigaChat_Bot.services;
 
 public class SendingRequest
 {

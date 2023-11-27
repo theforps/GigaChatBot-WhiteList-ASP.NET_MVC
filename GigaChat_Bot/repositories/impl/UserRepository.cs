@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using YandexGPT_bot.models;
-using YandexGPT_bot.repositories.interfaces;
+using GigaChat_Bot.models;
+using GigaChat_Bot.repositories.interfaces;
 
-namespace YandexGPT_bot.repositories.impl;
+namespace GigaChat_Bot.repositories.impl;
 
 public class UserRepository: IUserRepository
 {
@@ -44,5 +44,18 @@ public class UserRepository: IUserRepository
             _db.history.RemoveRange(history);
             await _db.SaveChangesAsync();
         }
+    }
+
+    public async Task clearHistory(long chatId)
+    {
+        var history = await _db.history.Where(x => x.User.ChatId == chatId).ToListAsync();
+        
+        if(history != null)
+        {
+            _db.history.RemoveRange(history);
+            await _db.SaveChangesAsync();
+        }
+
+
     }
 }

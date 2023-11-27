@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using YandexGPT_bot.models;
+using GigaChat_Bot.models;
 
-namespace YandexGPT_bot.repositories;
+namespace GigaChat_Bot.repositories;
 
 public class ApplicationDbContext:DbContext
 {

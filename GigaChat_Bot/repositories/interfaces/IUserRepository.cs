@@ -1,6 +1,6 @@
-using YandexGPT_bot.models;
+using GigaChat_Bot.models;
 
-namespace YandexGPT_bot.repositories.interfaces;
+namespace GigaChat_Bot.repositories.interfaces;
 
 public interface IUserRepository
 {
@@ -10,4 +10,5 @@ public interface IUserRepository
     Task addHistory(History history);
     Task<User> getUserById(int id);
     Task clearHistory(string username);
+    Task clearHistory(long chatId);
 }

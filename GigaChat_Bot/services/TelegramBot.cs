@@ -1,14 +1,14 @@
-﻿using YandexGPT_bot.repositories.impl;
-using YandexGPT_bot.repositories.interfaces;
-using YandexGPT_bot.resourses;
+﻿using GigaChat_Bot.repositories.impl;
+using GigaChat_Bot.repositories.interfaces;
+using GigaChat_Bot.resourses;
 using Telegram.Bot.Types;
-using User = YandexGPT_bot.models.User;
+using User = GigaChat_Bot.models.User;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 using System.Diagnostics;
 
-namespace YandexGPT_bot.services;
+namespace GigaChat_Bot.services;
 
 public class TelegramBot
 {
@@ -52,7 +52,12 @@ public class TelegramBot
 
             if (user == null)
             {
-                User newUser = new User() { Username = message.From.Username! };
+                User newUser = new User() 
+                { 
+                    Username = message.From.Username!,
+                    ChatId = chatId
+
+                };
 
                 await _userRepository.addUser(newUser);
 
@@ -72,6 +77,10 @@ public class TelegramBot
                 if (message.Text.Equals("/start"))
                 {
                     await client.MakeRequestAsync(sendingMessages.HelloMessage(chatId));
+                }
+                else if (message.Text.Equals("/restart"))
+                {
+                    await client.MakeRequestAsync(await sendingMessages.SimpleMessage(chatId, true));
                 }
                 else if (message.Text != null)
                 {
@@ -94,7 +103,8 @@ public class TelegramBot
 
             if (update.CallbackQuery!.Data == "start")
             {
-                await client.MakeRequestAsync(sendingMessages.SimpleMessage(chatId));
+                await client.MakeRequestAsync(await sendingMessages.SimpleMessage(chatId, false));
+
                 users.Add(chatId, true);
             }
 

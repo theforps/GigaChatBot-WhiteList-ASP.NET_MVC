@@ -2,12 +2,19 @@
 using Telegram.Bot.Requests;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
-using YandexGPT_bot.resourses;
+using GigaChat_Bot.repositories.impl;
+using GigaChat_Bot.repositories.interfaces;
+using GigaChat_Bot.resourses;
 
-namespace YandexGPT_bot.services;
+namespace GigaChat_Bot.services;
 
 public class SendingMessages
 {
+    private IUserRepository _userRepository;
+    public SendingMessages()
+    {
+        _userRepository = new UserRepository();
+    }
 
     public SendPhotoRequest HelloMessage(long chatId)
     {
@@ -23,8 +30,13 @@ public class SendingMessages
         return photoRequest;
     }
 
-    public SendMessageRequest SimpleMessage(long chatId)
+    public async Task<SendMessageRequest> SimpleMessage(long chatId, bool restart)
     {
+        if(restart)
+        {
+            await _userRepository.clearHistory(chatId);
+        }
+
         SendMessageRequest messageRequest = new SendMessageRequest(chatId, Consts.JsonObj!["startMessage"]!.ToString());
 
         return messageRequest;
