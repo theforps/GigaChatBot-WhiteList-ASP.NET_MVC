@@ -1,3 +1,6 @@
+using WhiteList_Web.Data.Impl;
+using WhiteList_Web.Data.Interfaces;
+
 namespace WhiteList
 {
     public class Program
@@ -11,13 +14,13 @@ namespace WhiteList
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
                 app.UseHsts();
             }
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -28,7 +31,7 @@ namespace WhiteList
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Login}/{action=Login}/{id?}");
 
             app.Run();
         }

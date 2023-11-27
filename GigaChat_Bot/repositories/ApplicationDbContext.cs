@@ -16,4 +16,5 @@ public class ApplicationDbContext:DbContext
     
     public DbSet<User> users { get; set; }
     public DbSet<History> history { get; set; }
+    public DbSet<Account> accounts { get; set; }
 }

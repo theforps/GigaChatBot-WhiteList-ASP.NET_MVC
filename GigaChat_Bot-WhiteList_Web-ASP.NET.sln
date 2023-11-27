@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaChat_Bot", "GigaChat_Bot\GigaChat_Bot.csproj", "{86ECBB8D-C82F-4B76-9FA3-48D6BDF1142D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhiteList_Web", "WhiteList_Web\WhiteList_Web.csproj", "{F7939906-6A97-47DB-9886-369FC001C47B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhiteList_Web", "WhiteList_Web\WhiteList_Web.csproj", "{F7939906-6A97-47DB-9886-369FC001C47B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
