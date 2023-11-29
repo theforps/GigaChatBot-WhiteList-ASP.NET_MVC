@@ -1,5 +1,9 @@
+using GigaChat_Bot.repositories;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using WhiteList_Web.Data.Impl;
 using WhiteList_Web.Data.Interfaces;
+using WhiteList_Web.Services;
+using WhiteList_Web.Services.Interfaces;
 
 namespace WhiteList
 {
@@ -8,9 +12,12 @@ namespace WhiteList
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<ApplicationDbContext>();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 
@@ -20,7 +27,7 @@ namespace WhiteList
                 app.UseHsts();
             }
 
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

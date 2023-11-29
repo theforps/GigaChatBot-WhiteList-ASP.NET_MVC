@@ -1,0 +1,69 @@
+﻿@using WhiteList_Web.models;
+@model List<User>;
+@{
+    string temp;
+}
+<div>
+    <a class="btn btn-danger mb-3" asp-action="Exit">Выйти</a>
+
+    @if(Model == null || Model.Count < 0)
+    {
+        <h1>Пользователи не найдены</h1>
+    }
+    else
+    {
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Chat Id
+                    </th>
+                    <th>
+                        Active
+                    </th>
+                    <th>
+                        Message history
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var x in Model)
+                {
+                    <tr>
+                        <td>@x.Id</td>
+                        <td>@x.Username</td>
+                        <td>@x.ChatId</td>
+                        @if (x.Ban)
+                        {
+                            temp = "Unban";
+                        }
+                        else
+                        {
+                            temp = "Ban";
+                        }
+
+                        <td>
+                            <a asp-route-id="@x.Id" asp-action="Banned" class="btn btn-danger">@temp</a>
+                        </td>
+                        <td>
+                            <a asp-route-id="@x.Id" asp-action="Info" class="btn btn-info">Подробности</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+
+
+
+
+</div>
+

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace GigaChat_Bot.models;
+namespace WhiteList_Web.models;
 
 public class User
 {

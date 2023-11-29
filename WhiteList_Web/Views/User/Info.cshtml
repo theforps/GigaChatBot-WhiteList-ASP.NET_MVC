@@ -1,0 +1,43 @@
+﻿@using WhiteList_Web.models;
+@model List<History>;
+
+<div>
+    <a class="btn btn-danger mb-3" asp-action="Users">Вернуться</a>
+
+    @if (Model == null || Model.Count < 0)
+    {
+        <h1>История не найдена</h1>
+    }
+    else
+    {
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Role
+                    </th>
+                    <th>
+                        Message
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var x in Model)
+                {
+                    <tr>
+                        @if (!x.Role.Equals("system"))
+                        {
+                            <td>@x.Id</td>
+                            <td>@x.Role.ToUpper()</td>
+                            <td>@x.Message</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

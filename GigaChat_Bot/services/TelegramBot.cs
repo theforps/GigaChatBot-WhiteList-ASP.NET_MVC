@@ -81,6 +81,7 @@ public class TelegramBot
                 else if (message.Text.Equals("/restart"))
                 {
                     await client.MakeRequestAsync(await sendingMessages.SimpleMessage(chatId, true));
+                    users.Add(chatId, true);
                 }
                 else if (message.Text != null)
                 {

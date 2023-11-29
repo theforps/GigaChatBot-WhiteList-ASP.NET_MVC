@@ -1,8 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model DTOAccount;
+@{
+    ViewData["Title"] = "Login";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center ">
+    <h1 class="mt-5 display-4">Вход в систему</h1>
+    
+    <form class="align-content-center" method="post" asp-action="login">
+        <div class="">
+            <div class="display-6">
+                <label asp-for="login" class="mt-4 d-block"> Логин </label>
+                <input type="text" asp-for="login"/>
+            </div>
+                
+            <div class="display-6">
+                <label asp-for="password" class="mt-4 d-block"> Пароль </label>
+                <input type="text" asp-for="password" />
+            </div>
+
+            <div class="text-center mt-3">
+                <input style="font-size:50px; padding:0px 35px 0px 35px;" class="btn btn-secondary mt-2 " value="Войти" type="submit" asp-for="password" />
+            </div>
+        </div>
+    </form>
+
 </div>
