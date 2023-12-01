@@ -3,8 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using GigaChat_Bot.models;
-using GigaChat_Bot.repositories.impl;
-using GigaChat_Bot.repositories.interfaces;
+using GigaChat_Bot.repositories;
 using GigaChat_Bot.resourses;
 
 
@@ -12,8 +11,7 @@ namespace GigaChat_Bot.services;
 
 public class SendingRequest
 {
-    private IUserRepository _userRepository;
-    private IHistoryRepository _historyRepository;
+    private BaseRepository baseRepository;
     private Mapper _mapper;
     private List<Message> messages;
 
@@ -21,8 +19,7 @@ public class SendingRequest
     {
         messages = new();
         _mapper = new Mapper();
-        _historyRepository = new HistoryRepository();
-        _userRepository = new UserRepository();
+        baseRepository = new();
     }
     
     public async Task<string> GetAnswer(int userId, string text, string api)
@@ -32,8 +29,8 @@ public class SendingRequest
         var httpClient = new HttpClient(clientHandler);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {api}");
 
-        List<History> history = await _historyRepository.getHistory(userId);
-        User user = await _userRepository.getUserById(userId);
+        List<History> history = await baseRepository.getHistory(userId);
+        User user = await baseRepository.getUserById(userId);
 
         if (history != null && history.Count > 0)
         {
@@ -48,14 +45,14 @@ public class SendingRequest
                 User = user
             };
 
-            await _historyRepository.addHistory(settings);
+            await baseRepository.addHistory(settings);
         }
         
         Message message = new() { content = $"{text}" };
         messages.Add(message);
 
         History newHistory = _mapper.MapToHistory(message, user);
-        await _historyRepository.addHistory(newHistory);
+        await baseRepository.addHistory(newHistory);
 
         Request request = new() { messages = messages };
 
@@ -78,7 +75,7 @@ public class SendingRequest
             User = user
         };
 
-        await _historyRepository.addHistory(botMessage);
+        await baseRepository.addHistory(botMessage);
 
         return answer;
     }

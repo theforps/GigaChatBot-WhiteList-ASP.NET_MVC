@@ -1,14 +1,14 @@
 ﻿using System.Diagnostics;
-using WhiteList_Web.Data.Interfaces;
+using WhiteList_Web.Data;
 using WhiteList_Web.Models;
-using WhiteList_Web.Services.Interfaces;
+using WhiteList_Web.Models.DTO;
 
 namespace WhiteList_Web.Services;
 
-public class UserService : IUserService
+public class WebService : IWebService
 {
-    private readonly IUserRepository _userRepository;
-    public UserService(IUserRepository userRepository) {
+    private readonly IWebRepository _userRepository;
+    public WebService(IWebRepository userRepository) {
         _userRepository = userRepository;
     }
 

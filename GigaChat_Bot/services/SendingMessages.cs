@@ -2,19 +2,20 @@
 using Telegram.Bot.Requests;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
-using GigaChat_Bot.repositories.impl;
-using GigaChat_Bot.repositories.interfaces;
 using GigaChat_Bot.resourses;
+using GigaChat_Bot.repositories;
 
 namespace GigaChat_Bot.services;
 
 public class SendingMessages
 {
-    private IHistoryRepository _historyRepository;
+    private BaseRepository baseRepository;
     public SendingMessages()
     {
-        _historyRepository = new HistoryRepository();
+        baseRepository = new();
     }
+
+
 
     public SendPhotoRequest HelloMessage(long chatId)
     {
@@ -34,7 +35,7 @@ public class SendingMessages
     {
         if(restart)
         {
-            await _historyRepository.clearHistory(chatId);
+            await baseRepository.clearHistory(chatId);
         }
 
         SendMessageRequest messageRequest = new SendMessageRequest(chatId, Consts.JsonObj!["startMessage"]!.ToString());

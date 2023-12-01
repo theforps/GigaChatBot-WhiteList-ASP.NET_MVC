@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WhiteList_Web.Models;
-using WhiteList_Web.Services.Interfaces;
+using WhiteList_Web.Models.DTO;
+using WhiteList_Web.Services;
 
 namespace WhiteList_Web.Controllers;
 
 public class LoginController : Controller
 {
-    private readonly IUserService _userService;
-    public LoginController(IUserService userService) {
+    private readonly IWebService _userService;
+    public LoginController(IWebService userService) {
         _userService = userService;
     }
 

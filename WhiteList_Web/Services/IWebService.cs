@@ -1,8 +1,9 @@
 ﻿using WhiteList_Web.Models;
+using WhiteList_Web.Models.DTO;
 
-namespace WhiteList_Web.Services.Interfaces;
+namespace WhiteList_Web.Services;
 
-public interface IUserService
+public interface IWebService
 {
     Task<int> logIn(DTOAccount account);
     Task<List<User>> getUsers();

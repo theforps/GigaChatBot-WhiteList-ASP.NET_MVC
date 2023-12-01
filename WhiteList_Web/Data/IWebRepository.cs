@@ -1,8 +1,8 @@
 ﻿using WhiteList_Web.Models;
 
-namespace WhiteList_Web.Data.Interfaces;
+namespace WhiteList_Web.Data;
 
-public interface IUserRepository
+public interface IWebRepository
 {
     Task<User> getUserByUsername(string username);
     Task<List<User>> getAllUsers();

@@ -1,5 +1,4 @@
-﻿using GigaChat_Bot.repositories.impl;
-using GigaChat_Bot.repositories.interfaces;
+﻿using GigaChat_Bot.repositories;
 using GigaChat_Bot.resourses;
 using Telegram.Bot.Types;
 using User = GigaChat_Bot.models.User;
@@ -14,15 +13,14 @@ public class Navigator
 {
     private SendingMessages sendingMessages;
     private Dictionary<long, bool> users;
-    private IUserRepository _userRepository;
+    private BaseRepository baseRepository;
     private SendingRequest sendingRequest;
 
     public Navigator()
     {
-        sendingMessages = new SendingMessages();
-        users = new Dictionary<long, bool>();
-        _userRepository = new UserRepository();
-        sendingRequest = new SendingRequest();
+        sendingMessages = new();
+        users = new();
+        sendingRequest = new();
 
         TelegramBotClient client = new TelegramBotClient(Consts.BotApi);
         client.StartReceiving(Update, Error, new ReceiverOptions()
@@ -41,12 +39,14 @@ public class Navigator
     {
         var message = update.Message;
         long chatId;
-        
+
+        baseRepository = new();
+
         if (message != null)
         {
             chatId = message.Chat.Id;
 
-            User user = await _userRepository.getUserByUsername(message.From!.Username);
+            User user = await baseRepository.getUserByUsername(message.From!.Username);
 
             if (user == null)
             {
@@ -57,9 +57,9 @@ public class Navigator
 
                 };
 
-                await _userRepository.addUser(newUser);
+                await baseRepository.addUser(newUser);
 
-                user = await _userRepository.getUserByUsername(message.From!.Username);
+                user = await baseRepository.getUserByUsername(message.From!.Username);
             }
             else if (user.Ban)
             {

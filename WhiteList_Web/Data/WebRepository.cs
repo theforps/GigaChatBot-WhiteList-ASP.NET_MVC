@@ -1,14 +1,13 @@
 ﻿using GigaChat_Bot.repositories;
 using Microsoft.EntityFrameworkCore;
-using WhiteList_Web.Data.Interfaces;
 using WhiteList_Web.Models;
 
-namespace WhiteList_Web.Data.Impl;
+namespace WhiteList_Web.Data;
 
-public class UserRepository : IUserRepository
+public class WebRepository : IWebRepository
 {
     private readonly ApplicationDbContext _db;
-    public UserRepository(ApplicationDbContext db)
+    public WebRepository(ApplicationDbContext db)
     {
         _db = db;
     }
@@ -17,7 +16,7 @@ public class UserRepository : IUserRepository
     {
         var user = await _db.users.FirstOrDefaultAsync(x => x.Id == id);
 
-        if(user!.Ban)
+        if (user!.Ban)
             user.Ban = false;
         else
             user.Ban = true;
