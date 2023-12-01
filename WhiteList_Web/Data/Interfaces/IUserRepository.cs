@@ -1,4 +1,4 @@
-﻿using WhiteList_Web.models;
+﻿using WhiteList_Web.Models;
 
 namespace WhiteList_Web.Data.Interfaces;
 

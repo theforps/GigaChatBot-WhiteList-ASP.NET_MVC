@@ -10,10 +10,10 @@ namespace GigaChat_Bot.services;
 
 public class SendingMessages
 {
-    private IUserRepository _userRepository;
+    private IHistoryRepository _historyRepository;
     public SendingMessages()
     {
-        _userRepository = new UserRepository();
+        _historyRepository = new HistoryRepository();
     }
 
     public SendPhotoRequest HelloMessage(long chatId)
@@ -34,7 +34,7 @@ public class SendingMessages
     {
         if(restart)
         {
-            await _userRepository.clearHistory(chatId);
+            await _historyRepository.clearHistory(chatId);
         }
 
         SendMessageRequest messageRequest = new SendMessageRequest(chatId, Consts.JsonObj!["startMessage"]!.ToString());

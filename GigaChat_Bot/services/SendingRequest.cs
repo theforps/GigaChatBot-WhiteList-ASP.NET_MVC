@@ -13,29 +13,31 @@ namespace GigaChat_Bot.services;
 public class SendingRequest
 {
     private IUserRepository _userRepository;
+    private IHistoryRepository _historyRepository;
+    private Mapper _mapper;
+    private List<Message> messages;
 
     public SendingRequest()
     {
+        messages = new();
+        _mapper = new Mapper();
+        _historyRepository = new HistoryRepository();
         _userRepository = new UserRepository();
     }
     
     public async Task<string> GetAnswer(int userId, string text, string api)
     {
-        Mapper mapper = new Mapper();
-        List<Message> messages = new List<Message>();
-
         HttpClientHandler clientHandler = new HttpClientHandler();
         clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
         var httpClient = new HttpClient(clientHandler);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {api}");
 
-        List<History> history = await _userRepository.getHistory(userId);
+        List<History> history = await _historyRepository.getHistory(userId);
         User user = await _userRepository.getUserById(userId);
-        
+
         if (history != null && history.Count > 0)
         {
-            messages = mapper.MapToListMessages(history);
+            messages = _mapper.MapToListMessages(history);
         }
         else
         {
@@ -46,16 +48,17 @@ public class SendingRequest
                 User = user
             };
 
-            await _userRepository.addHistory(settings);
+            await _historyRepository.addHistory(settings);
         }
         
-        Message message = new Message() { content = $"{text}" };
-
+        Message message = new() { content = $"{text}" };
         messages.Add(message);
-        History newHistory = mapper.MapToHistory(message, user);
-        await _userRepository.addHistory(newHistory);
 
-        Request request = new Request() { messages = messages };
+        History newHistory = _mapper.MapToHistory(message, user);
+        await _historyRepository.addHistory(newHistory);
+
+        Request request = new() { messages = messages };
+
 
         string payload = JsonConvert.SerializeObject(request);
         StringContent content = new StringContent(payload, Encoding.UTF8, "application/json");
@@ -75,7 +78,7 @@ public class SendingRequest
             User = user
         };
 
-        await _userRepository.addHistory(botMessage);
+        await _historyRepository.addHistory(botMessage);
 
         return answer;
     }
@@ -95,7 +98,8 @@ public class SendingRequest
             new KeyValuePair<string, string>("scope", "GIGACHAT_API_PERS"),
         };
 
-        string response = await httpClient.PostAsync(Consts.GptUrlReg, new FormUrlEncodedContent(data)).Result.Content.ReadAsStringAsync();
+        string response = await httpClient.PostAsync(Consts.GptUrlReg, 
+            new FormUrlEncodedContent(data)).Result.Content.ReadAsStringAsync();
 
         JsonNode jsonObj = JsonNode.Parse(response)!;
 

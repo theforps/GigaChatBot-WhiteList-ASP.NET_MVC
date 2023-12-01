@@ -1,7 +1,7 @@
 ﻿using GigaChat_Bot.repositories;
 using Microsoft.EntityFrameworkCore;
 using WhiteList_Web.Data.Interfaces;
-using WhiteList_Web.models;
+using WhiteList_Web.Models;
 
 namespace WhiteList_Web.Data.Impl;
 
@@ -17,7 +17,7 @@ public class UserRepository : IUserRepository
     {
         var user = await _db.users.FirstOrDefaultAsync(x => x.Id == id);
 
-        if(user.Ban)
+        if(user!.Ban)
             user.Ban = false;
         else
             user.Ban = true;
@@ -35,7 +35,7 @@ public class UserRepository : IUserRepository
 
     public async Task<List<History>> getHistory(int id)
     {
-        var history = await _db.history.Where(x => x.User.Id == id).ToListAsync();
+        var history = await _db.history.Where(x => x.User!.Id == id).ToListAsync();
 
         return history;
     }
@@ -44,6 +44,6 @@ public class UserRepository : IUserRepository
     {
         var user = await _db.users.FirstOrDefaultAsync(x => x.Username == username);
 
-        return user;
+        return user!;
     }
 }

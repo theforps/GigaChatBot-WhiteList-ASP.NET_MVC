@@ -1,12 +1,14 @@
-﻿@using WhiteList_Web.models;
-@model List<User>;
+﻿@using WhiteList_Web.Models;
+@model DTOUsers;
 @{
     string temp;
 }
+
+
 <div>
     <a class="btn btn-danger mb-3" asp-action="Exit">Выйти</a>
 
-    @if(Model == null || Model.Count < 0)
+    @if(Model.users == null || Model.users.Count < 0)
     {
         <h1>Пользователи не найдены</h1>
     }
@@ -33,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(var x in Model)
+                @foreach(var x in Model.users)
                 {
                     <tr>
                         <td>@x.Id</td>
@@ -60,10 +62,4 @@
         </table>
     }
 
-
-
-
-
-
 </div>
-

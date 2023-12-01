@@ -10,14 +10,14 @@ using System.Diagnostics;
 
 namespace GigaChat_Bot.services;
 
-public class TelegramBot
+public class Navigator
 {
     private SendingMessages sendingMessages;
     private Dictionary<long, bool> users;
     private IUserRepository _userRepository;
     private SendingRequest sendingRequest;
 
-    public TelegramBot()
+    public Navigator()
     {
         sendingMessages = new SendingMessages();
         users = new Dictionary<long, bool>();
@@ -41,8 +41,6 @@ public class TelegramBot
     {
         var message = update.Message;
         long chatId;
-
-        Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update));
 
         if (message != null)
         {
@@ -81,6 +79,7 @@ public class TelegramBot
                 else if (message.Text.Equals("/restart"))
                 {
                     await client.MakeRequestAsync(await sendingMessages.SimpleMessage(chatId, true));
+
                     users.Add(chatId, true);
                 }
                 else if (message.Text != null)

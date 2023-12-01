@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WhiteList_Web.models;
+namespace WhiteList_Web.Models;
 
 public class User
 {

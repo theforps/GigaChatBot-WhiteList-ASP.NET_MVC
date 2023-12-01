@@ -23,9 +23,9 @@ public class LoginController : Controller
     {
         var result = await _userService.logIn(account);
 
-        if(result)
+        if(result >= 0)
         {
-            return RedirectToAction("Users", "User");
+            return RedirectToAction("Users", "User", result);
         }
 
         return View(account);

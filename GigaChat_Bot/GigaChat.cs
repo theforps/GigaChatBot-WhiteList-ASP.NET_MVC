@@ -6,7 +6,7 @@ public class GigaChat
 {
     static async Task Main()
     {
-        TelegramBot bot = new TelegramBot();
+        Navigator bot = new();
         
         await Task.Delay(-1);
     }

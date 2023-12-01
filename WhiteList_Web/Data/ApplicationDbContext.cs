@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WhiteList_Web.models;
+using WhiteList_Web.Models;
 
 namespace GigaChat_Bot.repositories;
 
