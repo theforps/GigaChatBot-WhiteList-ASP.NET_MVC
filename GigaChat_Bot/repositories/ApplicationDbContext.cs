@@ -3,7 +3,7 @@ using GigaChat_Bot.models;
 
 namespace GigaChat_Bot.repositories;
 
-public class ApplicationDbContext:DbContext
+public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext()
     {

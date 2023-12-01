@@ -41,7 +41,7 @@ public class Navigator
     {
         var message = update.Message;
         long chatId;
-
+        
         if (message != null)
         {
             chatId = message.Chat.Id;

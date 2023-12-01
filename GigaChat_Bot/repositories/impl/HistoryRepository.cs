@@ -6,11 +6,7 @@ namespace GigaChat_Bot.repositories.impl;
 
 public class HistoryRepository : IHistoryRepository
 {
-    private readonly ApplicationDbContext _db;
-    public HistoryRepository()
-    {
-        _db = new ApplicationDbContext();
-    }
+    private readonly ApplicationDbContext _db = new ();
 
     public async Task<List<History>> getHistory(int userId)
     {
