@@ -31,13 +31,8 @@ public class SendingMessages
         return photoRequest;
     }
 
-    public async Task<SendMessageRequest> SimpleMessage(long chatId, bool restart)
+    public async Task<SendMessageRequest> SimpleMessage(long chatId)
     {
-        if(restart)
-        {
-            await baseRepository.clearHistory(chatId);
-        }
-
         SendMessageRequest messageRequest = new SendMessageRequest(chatId, Consts.JsonObj!["startMessage"]!.ToString());
 
         return messageRequest;

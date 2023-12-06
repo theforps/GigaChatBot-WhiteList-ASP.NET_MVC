@@ -14,9 +14,11 @@ public class SendingRequest
     private BaseRepository baseRepository;
     private Mapper _mapper;
     private List<Message> messages;
+    private JsonProcessing _jsonProcessing;
 
     public SendingRequest()
     {
+        _jsonProcessing = new JsonProcessing();
         messages = new();
         _mapper = new Mapper();
         baseRepository = new();
@@ -56,17 +58,12 @@ public class SendingRequest
 
         Request request = new() { messages = messages };
 
-
         string payload = JsonConvert.SerializeObject(request);
         StringContent content = new StringContent(payload, Encoding.UTF8, "application/json");
 
         string response = await httpClient.PostAsync(Consts.GptUrl, content).Result.Content.ReadAsStringAsync();
-
-        JObject jsonObj = JObject.Parse(response);
-        JArray myArray = (JArray)jsonObj["choices"]!;
-        JObject finalObj = JObject.Parse(myArray[0].ToString())!;
-
-        string answer = finalObj!["message"]!["content"]!.ToString();
+        
+        string answer = _jsonProcessing.GetAnswer(response);
 
         History botMessage = new History()
         {
@@ -83,7 +80,11 @@ public class SendingRequest
     public async Task<string> GetApi()
     {
         HttpClientHandler clientHandler = new HttpClientHandler();
-        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+        clientHandler.ServerCertificateCustomValidationCallback = (
+            sender, 
+            cert, 
+            chain, 
+            sslPolicyErrors) => { return true; };
 
         HttpClient httpClient = new HttpClient(clientHandler);
 
@@ -98,9 +99,7 @@ public class SendingRequest
         string response = await httpClient.PostAsync(Consts.GptUrlReg, 
             new FormUrlEncodedContent(data)).Result.Content.ReadAsStringAsync();
 
-        JsonNode jsonObj = JsonNode.Parse(response)!;
-
-        var result = jsonObj!["access_token"]!.ToString();
+        string result = _jsonProcessing.GetAccesToken(response);
 
         return result;
     }

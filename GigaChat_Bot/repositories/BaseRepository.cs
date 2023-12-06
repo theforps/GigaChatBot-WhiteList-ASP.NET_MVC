@@ -49,11 +49,11 @@ public class BaseRepository
         }
     }
 
-    public async Task clearHistory(long chatId)
+    public async Task clearHistory(int userId)
     {
-        var history = await _db.history.Where(x => x.User.ChatId == chatId).ToListAsync();
+        var history = await _db.history.Where(x => x.User.Id == userId).ToListAsync();
 
-        if (history != null)
+        if (history != null && history.Count > 0)
         {
             _db.history.RemoveRange(history);
             await _db.SaveChangesAsync();
