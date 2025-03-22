@@ -4,31 +4,31 @@ using Newtonsoft.Json.Linq;
 
 namespace GigaChat_Bot.services;
 
-public class JsonProcessing
+public static class JsonProcessing
 {
-    public string GetAnswer(string response)
+    public static string GetAnswer(string response)
     {
-        JObject jsonObj = JObject.Parse(response);
-        JArray myArray = (JArray)jsonObj["choices"]!;
-        JObject finalObj = JObject.Parse(myArray[0].ToString())!;
+        var jsonObj = JObject.Parse(response);
+        var myArray = (JArray)jsonObj["choices"]!;
+        var finalObj = JObject.Parse(myArray[0].ToString())!;
 
-        string answer = finalObj!["message"]!["content"]!.ToString();
+        var answer = finalObj["message"]!["content"]!.ToString();
 
         return answer;
     }
     
-    public string GetAccesToken(string response)
+    public static string GetAccessToken(string response)
     {
-        JsonNode jsonObj = JsonNode.Parse(response)!;
+        var jsonObj = JsonNode.Parse(response)!;
 
-        var result = jsonObj!["access_token"]!.ToString();
+        var result = jsonObj["access_token"]!.ToString();
 
         return result;
     }
     
-    public string GetBanMessage()
+    public static string GetBanMessage()
     {
-        string text = Consts.JsonObj["ban"]!.ToString();
+        var text = MesInfo.Ban;
 
         return text;
     }

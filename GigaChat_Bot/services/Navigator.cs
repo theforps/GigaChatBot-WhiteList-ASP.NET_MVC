@@ -15,17 +15,15 @@ public class Navigator
     private Dictionary<long, bool> users;
     private BaseRepository baseRepository;
     private SendingRequest sendingRequest;
-    private JsonProcessing _jsonProcessing;
 
     public Navigator()
     {
-        _jsonProcessing = new();
-        sendingMessages = new();
-        users = new();
-        sendingRequest = new();
+        sendingMessages = new SendingMessages();
+        users = new Dictionary<long, bool>();
+        sendingRequest = new SendingRequest();
 
-        TelegramBotClient client = new TelegramBotClient(Consts.BotApi);
-        client.StartReceiving(Update, Error, new ReceiverOptions()
+        var client = new TelegramBotClient(Consts.BotApi);
+        client.StartReceiving(Update, Error, new ReceiverOptions
         {
             AllowedUpdates = new[]
             {
@@ -44,17 +42,17 @@ public class Navigator
             var message = update.Message;
             long chatId;
 
-            baseRepository = new();
+            baseRepository = new BaseRepository();
 
             if (message != null)
             {
                 chatId = message.Chat.Id;
 
-                User user = await baseRepository.getUserByUsername(message.From!.Username);
+                var user = await baseRepository.getUserByUsername(message.From!.Username);
 
                 if (user == null)
                 {
-                    User newUser = new User()
+                    var newUser = new User
                     {
                         Username = message.From.Username!,
                         ChatId = chatId
@@ -69,9 +67,9 @@ public class Navigator
                 }
                 else if (user.Ban)
                 {
-                    string text = _jsonProcessing.GetBanMessage();
+                    string text = JsonProcessing.GetBanMessage();
 
-                    await sendingMessages.SendTextMessage(chatId, text, client);
+                    await SendingMessages.SendTextMessage(chatId, text, client);
 
                     return;
                 }
@@ -80,22 +78,24 @@ public class Navigator
                 {
                     if (message.Text.Equals("/start"))
                     {
-                        await client.MakeRequestAsync(sendingMessages.HelloMessage(chatId));
+                        await client.MakeRequestAsync(sendingMessages.HelloMessage(chatId), token);
                     }
                     else if (message.Text.Equals("/restart"))
                     {
                         await baseRepository.clearHistory(user.Id);
-                        
-                        await client.MakeRequestAsync(await sendingMessages.SimpleMessage(chatId));
 
-                        users.TryGetValue(chatId, out bool check);
+                        var result = SendingMessages.SimpleMessage(chatId);
+                        
+                        await client.MakeRequestAsync(result, token);
+
+                        users.TryGetValue(chatId, out var check);
                         
                         if(!check)
                             users.Add(chatId, true);
                     }
                     else if (message.Text != null)
                     {
-                        users.TryGetValue(chatId, out bool canSend);
+                        users.TryGetValue(chatId, out var canSend);
 
                         if (canSend)
                         {
@@ -103,7 +103,7 @@ public class Navigator
 
                             var result = await sendingRequest.GetAnswer(user.Id, message.Text, apiKey);
 
-                            await sendingMessages.SendTextMessage(chatId, result, client);
+                            await SendingMessages.SendTextMessage(chatId, result, client);
                         }
                     }
                 }
@@ -114,7 +114,7 @@ public class Navigator
 
                 if (update.CallbackQuery!.Data == "start")
                 {
-                    await client.MakeRequestAsync(await sendingMessages.SimpleMessage(chatId));
+                    await client.MakeRequestAsync(SendingMessages.SimpleMessage(chatId), token);
 
                     users.Add(chatId, true);
                 }

@@ -9,36 +9,34 @@ namespace GigaChat_Bot.services;
 
 public class SendingMessages
 {
-    private BaseRepository baseRepository;
-    public SendingMessages()
-    {
-        baseRepository = new();
-    }
-
+    private BaseRepository baseRepository = new();
 
 
     public SendPhotoRequest HelloMessage(long chatId)
     {
-        SendPhotoRequest photoRequest = new SendPhotoRequest(chatId, InputFile.FromUri(Consts.JsonObj!["helloImg"]!.ToString()));
-                    
-        photoRequest.Caption = Consts.JsonObj!["hello"]!.ToString();
-                    
-        InlineKeyboardButton button = new InlineKeyboardButton("Начать");
-        button.CallbackData = "start";
-        
+        var photoRequest = new SendPhotoRequest(chatId, InputFile.FromUri(MesInfo.HelloImg))
+        {
+            Caption = MesInfo.Hello
+        };
+
+        var button = new InlineKeyboardButton("Начать")
+        {
+            CallbackData = "start"
+        };
+
         photoRequest.ReplyMarkup = new InlineKeyboardMarkup(button);
         
         return photoRequest;
     }
 
-    public async Task<SendMessageRequest> SimpleMessage(long chatId)
+    public static SendMessageRequest SimpleMessage(long chatId)
     {
-        SendMessageRequest messageRequest = new SendMessageRequest(chatId, Consts.JsonObj!["startMessage"]!.ToString());
+        var messageRequest = new SendMessageRequest(chatId, MesInfo.StartMessage);
 
         return messageRequest;
     }
 
-    public async Task SendTextMessage(long chatId, string text, ITelegramBotClient client)
+    public static async Task SendTextMessage(long chatId, string text, ITelegramBotClient client)
     {
         await client.SendTextMessageAsync(chatId, text);
     }

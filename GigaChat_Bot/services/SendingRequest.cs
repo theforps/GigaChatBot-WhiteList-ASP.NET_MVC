@@ -11,28 +11,19 @@ namespace GigaChat_Bot.services;
 
 public class SendingRequest
 {
-    private BaseRepository baseRepository;
-    private Mapper _mapper;
-    private List<Message> messages;
-    private JsonProcessing _jsonProcessing;
+    private BaseRepository baseRepository = new();
+    private readonly Mapper _mapper = new();
+    private List<Message> messages = new();
 
-    public SendingRequest()
-    {
-        _jsonProcessing = new JsonProcessing();
-        messages = new();
-        _mapper = new Mapper();
-        baseRepository = new();
-    }
-    
     public async Task<string> GetAnswer(int userId, string text, string api)
     {
-        HttpClientHandler clientHandler = new HttpClientHandler();
+        var clientHandler = new HttpClientHandler();
         clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
         var httpClient = new HttpClient(clientHandler);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {api}");
 
-        List<History> history = await baseRepository.getHistory(userId);
-        User user = await baseRepository.getUserById(userId);
+        var history = await baseRepository.getHistory(userId);
+        var user = await baseRepository.getUserById(userId);
 
         if (history != null && history.Count > 0)
         {
@@ -40,9 +31,9 @@ public class SendingRequest
         }
         else
         {
-            History settings = new History()
+            var settings = new History
             {
-                Message = Consts.JsonObj!["settings"]!.ToString(),
+                Message = MesInfo.Settings,
                 Role = "system",
                 User = user
             };
@@ -53,19 +44,19 @@ public class SendingRequest
         Message message = new() { content = $"{text}" };
         messages.Add(message);
 
-        History newHistory = _mapper.MapToHistory(message, user);
+        var newHistory = _mapper.MapToHistory(message, user);
         await baseRepository.addHistory(newHistory);
 
         Request request = new() { messages = messages };
 
-        string payload = JsonConvert.SerializeObject(request);
-        StringContent content = new StringContent(payload, Encoding.UTF8, "application/json");
+        var payload = JsonConvert.SerializeObject(request);
+        using var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-        string response = await httpClient.PostAsync(Consts.GptUrl, content).Result.Content.ReadAsStringAsync();
+        var response = await httpClient.PostAsync(Consts.GptUrl, content).Result.Content.ReadAsStringAsync();
         
-        string answer = _jsonProcessing.GetAnswer(response);
+        var answer = JsonProcessing.GetAnswer(response);
 
-        History botMessage = new History()
+        var botMessage = new History
         {
             Message = answer,
             Role = "assistant",
@@ -79,14 +70,14 @@ public class SendingRequest
 
     public async Task<string> GetApi()
     {
-        HttpClientHandler clientHandler = new HttpClientHandler();
+        var clientHandler = new HttpClientHandler();
         clientHandler.ServerCertificateCustomValidationCallback = (
             sender, 
             cert, 
             chain, 
             sslPolicyErrors) => { return true; };
 
-        HttpClient httpClient = new HttpClient(clientHandler);
+        var httpClient = new HttpClient(clientHandler);
 
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Consts.GptToken}");
         httpClient.DefaultRequestHeaders.Add("RqUID", $"{Consts.GptUid}");
@@ -96,10 +87,10 @@ public class SendingRequest
             new KeyValuePair<string, string>("scope", "GIGACHAT_API_PERS"),
         };
 
-        string response = await httpClient.PostAsync(Consts.GptUrlReg, 
+        var response = await httpClient.PostAsync(Consts.GptUrlReg, 
             new FormUrlEncodedContent(data)).Result.Content.ReadAsStringAsync();
 
-        string result = _jsonProcessing.GetAccesToken(response);
+        var result = JsonProcessing.GetAccessToken(response);
 
         return result;
     }
