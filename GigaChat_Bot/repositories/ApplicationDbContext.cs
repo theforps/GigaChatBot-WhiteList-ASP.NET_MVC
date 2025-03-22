@@ -11,7 +11,9 @@ public class ApplicationDbContext : DbContext
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=metro;Username=postgres;Password=postgres");
+        // For Docker
+        // optionsBuilder.UseNpgsql("Host=db;Port=5432;Database=GigaChatDb;Username=postgres;Password=postgres");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=GigaChatDb;Username=postgres;Password=postgres");
     }
     
     public DbSet<User> users { get; set; }
